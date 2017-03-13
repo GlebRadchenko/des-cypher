@@ -8,11 +8,14 @@
 
 import Foundation
 
-let encryptedData = Des.instance.encryptDES(data: "Anton", key: "Hello!!")
+let encryptedData = Des.instance.encryptDES(data: "Anton", key: "HelloTo")
 let encryptedBytes = encryptedData.toBytesArray()
 let encryptedString = String(data: Data(bytes: encryptedBytes), encoding: .ascii)
 
-let decryptedData = Des.instance.decryptDES(encryptedData, key: "Hello!!")
+print(encryptedString)
+
+let decryptedData = Des.instance.decryptDES(encryptedData, key: "HelloTo")
 let bytes = decryptedData.toBytesArray()
 let data = Data(bytes: bytes)
 let string = String(data: data, encoding: .ascii)
+print(string)
