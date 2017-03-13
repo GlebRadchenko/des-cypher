@@ -8,7 +8,7 @@
 
 import Foundation
 
-let encryptedData = Des.instance.encryptDES(data: "Anton", key: "HelloTo")
+let encryptedData = Des.instance.encryptDES(data: "Test", key: "Hello!!")
 let encryptedBytes = encryptedData.toBytesArray()
 let encryptedString = String(data: Data(bytes: encryptedBytes), encoding: .ascii)
 

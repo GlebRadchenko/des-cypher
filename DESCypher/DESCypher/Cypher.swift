@@ -108,7 +108,8 @@ class Des {
     }
     
     public let C0table = [57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18,
-                           10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60, 52, 44, 36,]
+                           10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60, 52, 44, 36]
+    
     public let D0table = [63, 55, 47, 39, 31, 23, 15, 7, 62, 54, 46, 38, 30, 22,
                            14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4]
     
@@ -122,6 +123,7 @@ class Des {
         let validPositions = [14, 17, 11, 24, 1, 5, 3, 28, 15, 6, 21, 10, 23, 19, 12, 4,
                               26, 8, 16, 7, 27, 20, 13, 2, 41, 52, 31, 37, 47, 55, 30, 40,
                               51, 45, 33, 48, 44, 49, 39, 56, 34, 53, 46, 42, 50, 36, 29, 32]
+
         var C0: [UInt8] = []
         var D0: [UInt8] = []
         
@@ -129,27 +131,22 @@ class Des {
             C0.append(primary[cIndex - 1])
             D0.append(primary[dIndex - 1])
         }
-        var Ci: [[UInt8]] = []
-        var Di: [[UInt8]] = []
         
-        Ci.append(encode
-            ? C0.shiftLeft(by: shiftsTable[0])
-            : C0.shiftRight(by: shiftsTable[0]))
+        var Ci: [[UInt8]] = [C0]
+        var Di: [[UInt8]] = [D0]
         
-        Di.append(encode
-            ? D0.shiftLeft(by: shiftsTable[0])
-            : D0.shiftRight(by: shiftsTable[0]))
-        
-        for round in 2...16 {
-            
+        for round in 1...16 {
             Ci.append(encode
-                ? Ci[round - 2].shiftLeft(by: shiftsTable[round - 1])
-                : Ci[round - 2].shiftRight(by: shiftsTable[round - 1]))
+                ? Ci[round - 1].shiftLeft(by: shiftsTable[round - 1])
+                : Ci[round - 1].shiftRight(by: shiftsTable[round - 1]))
             
             Di.append(encode
-                ? Di[round - 2].shiftLeft(by: shiftsTable[round - 1])
-                : Di[round - 2].shiftRight(by: shiftsTable[round - 1]))
+                ? Di[round - 1].shiftLeft(by: shiftsTable[round - 1])
+                : Di[round - 1].shiftRight(by: shiftsTable[round - 1]))
         }
+        
+        Ci.removeFirst()
+        Di.removeFirst()
         
         keys = zip(Ci, Di).map({ (c, d) -> [UInt8] in
             let fullKey = c + d
@@ -158,6 +155,7 @@ class Des {
             for (swapIndex) in validPositions {
                 validKey.append(fullKey[swapIndex - 1])
             }
+            
             return validKey
         })
         
@@ -250,7 +248,7 @@ class Des {
         //MARK: - Algo
         return ipReplacedData
             .flatMap { (block) -> [UInt8] in
-                return encodingRounds(block: block, keys: roundKeys)
+                return replaceWithIP(ip: decodeIP, bits:encodingRounds(block: block, keys: roundKeys))
             }.reduce([], +)
     }
     
