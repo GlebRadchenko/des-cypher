@@ -150,11 +150,14 @@ class Des {
         
         keys = zip(Ci, Di).map({ (c, d) -> [UInt8] in
             let fullKey = c + d
+            print("Key bytes: ", fullKey.toBytesArray())
             var validKey: [UInt8] = []
             
             for (swapIndex) in validPositions {
                 validKey.append(fullKey[swapIndex - 1])
             }
+            
+            print(validKey)
             
             return validKey
         })
@@ -163,14 +166,14 @@ class Des {
         return keys
     }
     
-    func feystel(R: [UInt8], key: [UInt8], Pmash: [Int]) -> [UInt8] {
+    func feystel(R: [UInt8], key: [UInt8], Pmash: [Int]) -> [UInt8] { //feistel
         
         var extended: [UInt8] = []
         for (swapIndex) in E {
             extended.append(R[swapIndex - 1])
-        }
+        }//checked
         
-        var xored: [UInt8] = extended ^^ key
+        var xored: [UInt8] = extended ^^ key //checked
         var blocks: [[UInt8]] = []
         
         var blockIndex = 0
@@ -184,16 +187,19 @@ class Des {
         }
         
         func getA(block: [UInt8]) -> Int {
-            return Int(block[0]).pow(times: 1) + Int(block[5]).pow(times: 0)
+            let value = block[0] * UInt8(2.pow(times: 1)) +  block[5] * UInt8(2.pow(times: 0)) // checked
+
+            return Int(value)
         }
         
         func getB(block: [UInt8]) -> Int {
-            return
-                Int(block[1]).pow(times: 3) +
-                    Int(block[2]).pow(times: 2) +
-                    Int(block[3]).pow(times: 1) +
-                    Int(block[4]).pow(times: 0)
-        }
+            let value =
+                block[1] * UInt8(2.pow(times: 3)) +
+                block[2] * UInt8(2.pow(times: 2)) +
+                block[3] * UInt8(2.pow(times: 1)) +
+                block[4] * UInt8(2.pow(times: 0))
+            return Int(value)
+        }//checked
         
         var bitBlocks4: [[UInt8]] = []
         
@@ -229,8 +235,28 @@ class Des {
         
         for round in 1...16 {
             let RiMinusOne = Ri
+            let LiMinusOne = Li
+            
             Li = Ri
-            Ri = Li ^^ feystel(R: RiMinusOne, key: keys[round - 1], Pmash: P)
+            Ri = LiMinusOne ^^ feystel(R: RiMinusOne, key: keys[round - 1], Pmash: P)
+        }
+        
+        return Li + Ri
+    }
+    
+    func decodingRounds(block: [UInt8], keys: [[UInt8]]) -> [UInt8] {
+        let L0 = block[0..<32].map { $0 }
+        let R0 = block[32..<64].map { $0 }
+        
+        var Li = L0
+        var Ri = R0
+        
+        for round in 1...16 {
+            let RiMinusOne = Ri
+            let LiMinusOne = Li
+            
+            Ri = Li
+            Li = RiMinusOne ^^ feystel(R: LiMinusOne, key: keys[round - 1], Pmash: P)
         }
         
         return Li + Ri
@@ -240,7 +266,7 @@ class Des {
         let blocks = data.data().bits().to64Blocks()
         let ipReplacedData = blocks.map({ replaceWithIP(ip: IP, bits: $0) })
         
-        let key = key.data(using: .ascii)!.bits()
+        let key = key.data(using: .utf8)!.bits()
         assert(key.count == 56, "Wrong key")
         let extendedKey = extendWithBits(key: key)
         let roundKeys = generateKeys(from: extendedKey, encode: true)
@@ -248,7 +274,7 @@ class Des {
         //MARK: - Algo
         return ipReplacedData
             .flatMap { (block) -> [UInt8] in
-                return replaceWithIP(ip: decodeIP, bits:encodingRounds(block: block, keys: roundKeys))
+                return replaceWithIP(ip: decodeIP, bits: encodingRounds(block: block, keys: roundKeys))
             }.reduce([], +)
     }
     
@@ -256,32 +282,18 @@ class Des {
     
     public func decryptDES(_ encryptedData: [UInt8], key: String) -> [UInt8] {
         let blocks = encryptedData.to64Blocks()
-        let ipReplacedData = blocks.map({ replaceWithIP(ip: decodeIP, bits: $0) })
+        let ipReplacedData = blocks.map({ replaceWithIP(ip: IP, bits: $0) })
         
-        let key = key.data(using: .ascii)!.bits()
+        let key = key.data(using: .utf8)!.bits()
         assert(key.count == 56, "Wrong key")
         let extendedKey = extendWithBits(key: key)
-        let roundKeys = generateKeys(from: extendedKey, encode: false).reversed().map { $0 }
+        let roundKeys = generateKeys(from: extendedKey, encode: false)
         
         
         //MARK: - Algo
         return ipReplacedData
             .flatMap { (block) -> [UInt8] in
-                
-                let L0 = block[0..<32].map { $0 }
-                let R0 = block[32..<64].map { $0 }
-                
-                var Li = L0
-                var Ri = R0
-                
-                for round in 1...16 {
-                    let RiPrev = Ri
-                    Ri = Li
-                    Li = RiPrev ^^ feystel(R: Li, key: roundKeys[round - 1], Pmash: P)
-                }
-                
-                
-                return Li + Ri
+                return replaceWithIP(ip: decodeIP, bits: decodingRounds(block: block, keys: roundKeys))
             }.reduce([], +)
     }
 }

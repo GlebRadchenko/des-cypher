@@ -47,7 +47,7 @@ public protocol DataDecodable {
 
 extension String: DataDecodable {
     public func data() -> Data {
-        return data(using: .ascii)!
+        return data(using: .utf8)!
     }
 }
 
@@ -83,6 +83,7 @@ public protocol Powable {
 
 extension Int: Powable {
     public func pow(times: Int) -> Int {
+        if self == 0 { return 0 }
         var value = 1
         if times == 0 { return value }
         for _ in 1...times {
@@ -95,6 +96,7 @@ extension Int: Powable {
 
 extension UInt8: Powable {
     public func pow(times: Int) -> UInt8 {
+        if self == 0 { return 0 }
         var value: UInt8 = 1
         if times == 0 { return value }
         for _ in 1...times {
@@ -152,6 +154,7 @@ extension Array where Element: BitDecodable {
     
     public func toBytesArray() -> [UInt8] {
         assert(count % 8 == 0, "Wrong size")
+        
         var bits = self
         var rawBytes: [[UInt8]] = []
         var byteIndex = 0
