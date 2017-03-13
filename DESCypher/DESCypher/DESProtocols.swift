@@ -9,7 +9,7 @@
 import Foundation
 
 
-extension Data {
+public extension Data {
     func bits() -> [UInt8] {
         return bitsArray().reduce([], +)
     }
@@ -41,22 +41,22 @@ public func ^^(lhs: [UInt8], rhs: [UInt8]) -> [UInt8] {
     }
 }
 
-protocol DataDecodable {
+public protocol DataDecodable {
     func data() -> Data
 }
 
 extension String: DataDecodable {
-    func data() -> Data {
-        return data(using: .utf8)!
+    public func data() -> Data {
+        return data(using: .ascii)!
     }
 }
 
-protocol BitDecodable {
+public protocol BitDecodable {
     func byteValue() -> UInt8
 }
 
 extension BitDecodable {
-    func first4bits() -> [UInt8] {
+    public func first4bits() -> [UInt8] {
         let byte = Int(byteValue())
         return [byte >> 3 & 0b1,
                 byte >> 2 & 0b1,
@@ -66,23 +66,23 @@ extension BitDecodable {
 }
 
 extension Int: BitDecodable {
-    func byteValue() -> UInt8 {
+    public func byteValue() -> UInt8 {
         return UInt8(self)
     }
 }
 
 extension UInt8: BitDecodable {
-    func byteValue() -> UInt8 {
+    public func byteValue() -> UInt8 {
         return self
     }
 }
 
-protocol Powable {
+public protocol Powable {
     func pow(times: Int) -> Self
 }
 
 extension Int: Powable {
-    func pow(times: Int) -> Int {
+    public func pow(times: Int) -> Int {
         var value = 1
         if times == 0 { return value }
         for _ in 1...times {
@@ -94,7 +94,7 @@ extension Int: Powable {
 }
 
 extension UInt8: Powable {
-    func pow(times: Int) -> UInt8 {
+    public func pow(times: Int) -> UInt8 {
         var value: UInt8 = 1
         if times == 0 { return value }
         for _ in 1...times {
@@ -105,7 +105,7 @@ extension UInt8: Powable {
     }
 }
 
-extension Array where Element: BitDecodable {
+public extension Array {
     func shiftLeft(by times: Int) -> [Element] {
         var result = self
         for _ in 0..<times {
@@ -121,8 +121,11 @@ extension Array where Element: BitDecodable {
         }
         return result
     }
+}
+
+extension Array where Element: BitDecodable {
     
-    func to64Blocks() -> [[UInt8]] {
+    public func to64Blocks() -> [[UInt8]] {
         let countToAdd = count % 64 == 0 ? 0 : 64 - count % 64
         
         let addData = [UInt8](repeating: 0, count: countToAdd)
@@ -147,7 +150,7 @@ extension Array where Element: BitDecodable {
         return blocks
     }
     
-    func toBytes() -> [UInt8] {
+    public func toBytesArray() -> [UInt8] {
         assert(count % 8 == 0, "Wrong size")
         var bits = self
         var rawBytes: [[UInt8]] = []

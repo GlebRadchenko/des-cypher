@@ -1,6 +1,6 @@
 //
-//  DesTests.swift
-//  DesTests
+//  DESTests.swift
+//  DESTests
 //
 //  Created by GlebRadchenko on 3/13/17.
 //  Copyright © 2017 Gleb Rachenko. All rights reserved.
@@ -9,15 +9,13 @@
 import XCTest
 @testable import DESCypher
 
-class DesTests: XCTestCase {
+class DESTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
@@ -39,6 +37,31 @@ class DesTests: XCTestCase {
         }
         
         XCTAssert(data.bits() == expectedBits.reduce([], +), "Wrong converting from byte to bits")
+        
+        
+        let newBytes = data.bitsArray().map { (bits) -> UInt8 in
+            var value: UInt8 = 0
+            
+            bits.enumerated().forEach({ (index, bit) in
+                value += bit * UInt8(2).pow(times: 7 - index)
+            })
+            
+            return value
+        }
+        
+        XCTAssert(newBytes == bytes, "Wrong converting from bits to bytes")
+    }
+    
+    func testIPReplace() {
+        let IPtable = Des.instance.IP
+        let data = "Test".data().bits().to64Blocks()
+        let ipReplaced = data.map { Des.instance.replaceWithIP(ip: IPtable, bits: $0) }
+        
+        for (index, block) in data.enumerated() {
+            for (initialIndex, replaceIndex) in IPtable.enumerated() {
+                XCTAssert(block[replaceIndex] == ipReplaced[index][IPtable[initialIndex]], "Wrong IP replacing")
+            }
+        }
     }
     
 }
