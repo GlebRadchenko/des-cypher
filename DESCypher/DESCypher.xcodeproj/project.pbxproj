@@ -10,6 +10,9 @@
 		609C8EDF1E7694C30067C9DE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C8EDE1E7694C30067C9DE /* main.swift */; };
 		609C8EE61E7694EE0067C9DE /* DESProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C8EE51E7694EE0067C9DE /* DESProtocols.swift */; };
 		609C8EE81E7694FC0067C9DE /* DESCypher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C8EE71E7694FC0067C9DE /* DESCypher.swift */; };
+		609C8EF01E76AB290067C9DE /* DesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C8EEF1E76AB290067C9DE /* DesTests.swift */; };
+		609C8EF51E76AB580067C9DE /* DESCypher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C8EE71E7694FC0067C9DE /* DESCypher.swift */; };
+		609C8EF61E76AB5B0067C9DE /* DESProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C8EE51E7694EE0067C9DE /* DESProtocols.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,10 +32,20 @@
 		609C8EDE1E7694C30067C9DE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		609C8EE51E7694EE0067C9DE /* DESProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DESProtocols.swift; sourceTree = "<group>"; };
 		609C8EE71E7694FC0067C9DE /* DESCypher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DESCypher.swift; sourceTree = "<group>"; };
+		609C8EED1E76AB290067C9DE /* DesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		609C8EEF1E76AB290067C9DE /* DesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesTests.swift; sourceTree = "<group>"; };
+		609C8EF11E76AB290067C9DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		609C8ED81E7694C30067C9DE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		609C8EEA1E76AB290067C9DE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				609C8EDD1E7694C30067C9DE /* DESCypher */,
+				609C8EEE1E76AB290067C9DE /* DesTests */,
 				609C8EDC1E7694C30067C9DE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				609C8EDB1E7694C30067C9DE /* DESCypher */,
+				609C8EED1E76AB290067C9DE /* DesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,6 +81,15 @@
 				609C8EE71E7694FC0067C9DE /* DESCypher.swift */,
 			);
 			path = DESCypher;
+			sourceTree = "<group>";
+		};
+		609C8EEE1E76AB290067C9DE /* DesTests */ = {
+			isa = PBXGroup;
+			children = (
+				609C8EEF1E76AB290067C9DE /* DesTests.swift */,
+				609C8EF11E76AB290067C9DE /* Info.plist */,
+			);
+			path = DesTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -88,6 +112,23 @@
 			productReference = 609C8EDB1E7694C30067C9DE /* DESCypher */;
 			productType = "com.apple.product-type.tool";
 		};
+		609C8EEC1E76AB290067C9DE /* DesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 609C8EF21E76AB290067C9DE /* Build configuration list for PBXNativeTarget "DesTests" */;
+			buildPhases = (
+				609C8EE91E76AB290067C9DE /* Sources */,
+				609C8EEA1E76AB290067C9DE /* Frameworks */,
+				609C8EEB1E76AB290067C9DE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DesTests;
+			productName = DesTests;
+			productReference = 609C8EED1E76AB290067C9DE /* DesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -99,6 +140,11 @@
 				ORGANIZATIONNAME = "Gleb Rachenko";
 				TargetAttributes = {
 					609C8EDA1E7694C30067C9DE = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 76RXYZCS9Y;
+						ProvisioningStyle = Automatic;
+					};
+					609C8EEC1E76AB290067C9DE = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 76RXYZCS9Y;
 						ProvisioningStyle = Automatic;
@@ -118,9 +164,20 @@
 			projectRoot = "";
 			targets = (
 				609C8EDA1E7694C30067C9DE /* DESCypher */,
+				609C8EEC1E76AB290067C9DE /* DesTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		609C8EEB1E76AB290067C9DE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		609C8ED71E7694C30067C9DE /* Sources */ = {
@@ -130,6 +187,16 @@
 				609C8EE81E7694FC0067C9DE /* DESCypher.swift in Sources */,
 				609C8EE61E7694EE0067C9DE /* DESProtocols.swift in Sources */,
 				609C8EDF1E7694C30067C9DE /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		609C8EE91E76AB290067C9DE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				609C8EF01E76AB290067C9DE /* DesTests.swift in Sources */,
+				609C8EF51E76AB580067C9DE /* DESCypher.swift in Sources */,
+				609C8EF61E76AB5B0067C9DE /* DESProtocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +309,34 @@
 			};
 			name = Release;
 		};
+		609C8EF31E76AB290067C9DE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 76RXYZCS9Y;
+				INFOPLIST_FILE = DesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.glebradchenko.DesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		609C8EF41E76AB290067C9DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 76RXYZCS9Y;
+				INFOPLIST_FILE = DesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.glebradchenko.DesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -259,6 +354,14 @@
 			buildConfigurations = (
 				609C8EE31E7694C30067C9DE /* Debug */,
 				609C8EE41E7694C30067C9DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		609C8EF21E76AB290067C9DE /* Build configuration list for PBXNativeTarget "DesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				609C8EF31E76AB290067C9DE /* Debug */,
+				609C8EF41E76AB290067C9DE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

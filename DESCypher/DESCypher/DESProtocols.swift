@@ -11,7 +11,12 @@ import Foundation
 
 extension Data {
     func bits() -> [UInt8] {
-        return self.flatMap { (byte) -> [UInt8] in
+        return bitsArray().reduce([], +)
+    }
+    
+    func bitsArray() -> [[UInt8]] {
+        return self.map { (byte) -> [UInt8] in
+            debugPrint("Convert byte: ", byte, " to bits: ")
             let bits = [ Int(byte) >> 7 & 0b1,
                          Int(byte) >> 6 & 0b1,
                          Int(byte) >> 5 & 0b1,
@@ -20,10 +25,11 @@ extension Data {
                          Int(byte) >> 2 & 0b1,
                          Int(byte) >> 1 & 0b1,
                          Int(byte) >> 0 & 0b1]
-            
+            debugPrint(bits)
             return bits.map({ UInt8($0) })
         }
     }
+    
 }
 
 infix operator ^^
@@ -129,10 +135,12 @@ extension Array where Element: BitDecodable {
         var bytesArray = addicted.map { (byte) -> UInt8 in
             return byte
         }
-        
+        debugPrint("Converting plain bits to blocks: ")
         while currentBlock < splitCount {
+            debugPrint(currentBlock, " Block:")
             let subArray = bytesArray[currentBlock * 64..<(currentBlock + 1) * 64].map({$0})
             blocks.append(subArray)
+            debugPrint(subArray)
             currentBlock += 1
         }
         
